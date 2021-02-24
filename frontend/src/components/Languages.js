@@ -1,10 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 
 import { getLanguageInfo } from '../services/languageInfo'
 
 export function LanguageList() {
-    const [ languageInfo ] = useState(getLanguageInfo())
+    const [ languageInfo, setLanguagesInfo ] = useState([])
+
+    useEffect(() => {
+      async function fetchData(){
+        const languagesInfo = await getLanguageInfo()
+        setLanguagesInfo(languagesInfo.data)
+      }
+      fetchData()
+    }, [])
+
     return (
       <Row>
         {
