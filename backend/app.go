@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 	"os"
 	"fmt"
 	"io/ioutil"
@@ -33,8 +34,15 @@ func LanguagesInfo(context *gin.Context) {
 	})
 }
 
+func CORSConfig() gin.HandlerFunc {
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000/", "*"}
+	return cors.New(config)
+}
+
 func main() {
 	router := gin.Default()
+	router.Use(CORSConfig())
 	router.GET("/languages/info", LanguagesInfo)
 	router.Run()
 }
