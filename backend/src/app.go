@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"encoding/json"
+	"backend/src/database"
 )
 
 func OpenJson(fileName string) []map[string]interface{}{
@@ -41,6 +42,7 @@ func CORSConfig() gin.HandlerFunc {
 }
 
 func main() {
+	database.Migrate()
 	router := gin.Default()
 	router.Use(CORSConfig())
 	router.GET("/languages/info", LanguagesInfo)
