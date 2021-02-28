@@ -1,0 +1,47 @@
+[
+    {
+        "name": "Algorithms",
+        "type": "tech"
+    },
+    {
+        "name": "User experience",
+        "type": "tech"
+    },
+    {
+        "name": "Designer",
+        "type": "tech"
+    },
+    {
+        "name": "Programming languages",
+        "type": "tech"
+    },
+    {
+        "name": "Mentoring",
+        "type": "soft"
+    },
+    {
+        "name": "Write",
+        "type": "soft"
+    },
+    {
+        "name": "Speaking",
+        "type": "soft"
+    },
+    {
+        "name": "Planing",
+        "type": "soft"
+    },
+    {
+        "name": "Creativity",
+        "type": "personality"
+    },
+    {
+        "name": "Focus",
+        "type": "personality"
+    },
+    {
+        "name": "Proactivity",
+        "type": "personality"
+    }
+
+]

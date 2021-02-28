@@ -8,10 +8,18 @@ import (
 )
 
 func fillsLanguageModel(db *gorm.DB) {
-	jsonLanguages := files.OpenJson("languages_definition.json")
-	for _, element :=  range jsonLanguages {
+	jsonLanguages := files.OpenJsonLanguages()
+	for _, element := range jsonLanguages {
 		db.Create(&models.Language{
 			Name: element.Name, Popularity: element.Popularity, Learning: element.Learning})
+	}
+}
+
+func fillsSkillModel(db *gorm.DB) {
+	jsonSkills := files.OpenJsonSkills()
+	for _, element := range jsonSkills {
+		db.Create(&models.Skill{
+			Name: element.Name, Type: element.Type})
 	}
 }
 
@@ -28,6 +36,8 @@ func Migrate() {
 	if !DBExists(){
 		db := GetConnection()
   		db.AutoMigrate(&models.Language{})
+		db.AutoMigrate(&models.Skill{})
 		fillsLanguageModel(db)
+		fillsSkillModel(db)
 	}
 }
