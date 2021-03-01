@@ -33,14 +33,14 @@ export function LanguageList() {
     return (
       <Card style={{ width: '18rem' }}>
         <Card.Body>
-          <Card.Title>{language.name}</Card.Title>
+          <Card.Title>{language.Name}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">
-            Popularity: {language.popularity}
+            Popularity: {language.Popularity}
           </Card.Subtitle>
           <Card.Subtitle className="mb-2 text-muted">
-            Learning: {language.learning}
+            Learning: {language.Learning}
           </Card.Subtitle>
-          {false && language.use.map((use) => <Card.Link href="#">{use}</Card.Link>)}
+          {false && language.Use.map((use) => <Card.Link href="#">{use}</Card.Link>)}
         </Card.Body>
       </Card>
     )

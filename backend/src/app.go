@@ -15,6 +15,14 @@ func LanguagesInfo(context *gin.Context) {
 		"data": languages})
 }
 
+func SkillsInfo(context *gin.Context) {
+	db := database.GetConnection()
+	var skills []models.Skill
+	db.Find(&skills)
+	context.JSON(200, gin.H{
+		"data": skills})
+}
+
 func CORSConfig() gin.HandlerFunc {
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:3000/", "*"}
@@ -25,6 +33,7 @@ func main() {
 	database.Migrate()
 	router := gin.Default()
 	router.Use(CORSConfig())
-	router.GET("/languages/info", LanguagesInfo)
+	router.GET("/languages", LanguagesInfo)
+	router.GET("/skills", SkillsInfo)
 	router.Run()
 }
