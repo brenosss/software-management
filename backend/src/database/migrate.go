@@ -35,7 +35,7 @@ func DBExists() bool {
 func Migrate() {
 	if !DBExists(){
 		db := GetConnection()
-  		db.AutoMigrate(&models.Language{})
+  	db.AutoMigrate(&models.Language{})
 		db.AutoMigrate(&models.Skill{})
 		fillsLanguageModel(db)
 		fillsSkillModel(db)
