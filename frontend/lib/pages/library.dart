@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/entities/languageInfo.dart';
+import 'package:frontend/services/languageInfo.dart';
+import 'package:frontend/pages/components/languageInfo.dart';
 
-class LibraryScreen extends StatelessWidget {
+class LibraryScreen extends StatefulWidget {
+  LibraryScreen({Key key}) : super(key: key);
+
+  @override
+  _LibraryScreenState createState() => _LibraryScreenState();
+}
+
+class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -8,13 +18,17 @@ class LibraryScreen extends StatelessWidget {
         title: Text("Library"),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to the first screen by popping the current route
-            // off the stack.
-            Navigator.pushNamed(context, '/');
+        child: FutureBuilder<List<LanguageInfo>>(
+          future: fetchLanguageInfo(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return LanguageInfoList(languageList: snapshot.data);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            // By default, show a loading spinner.
+            return CircularProgressIndicator();
           },
-          child: Text('Go back!'),
         ),
       ),
     );
