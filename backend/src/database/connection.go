@@ -1,14 +1,20 @@
 package database
 
 import (
-  "gorm.io/gorm"
-  "gorm.io/driver/sqlite"
+	"log"
+
+	"github.com/jmoiron/sqlx"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
-func GetConnection() *gorm.DB{
-	db, err := gorm.Open(sqlite.Open("software.db"), &gorm.Config{})
+const DatabaseName = "./software.db"
+
+func GetConnection() *sqlx.DB {
+	conn, err := sqlx.Connect("sqlite3", DatabaseName)
 	if err != nil {
-	  panic("failed to connect database")
+		log.Fatal(err)
 	}
-	return db
+	log.Printf("Database connection created")
+	return conn
 }

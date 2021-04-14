@@ -1,24 +1,21 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
 	"backend/src/database"
-	"backend/src/database/models"
+	"flag"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func LanguagesInfo(context *gin.Context) {
-	db := database.GetConnection()
-	var languages []models.Language
-	db.Find(&languages)
+	languages := database.GetLanguages()
 	context.JSON(200, gin.H{
 		"data": languages})
 }
 
 func SkillsInfo(context *gin.Context) {
-	db := database.GetConnection()
-	var skills []models.Skill
-	db.Find(&skills)
+	skills := database.GetSkills()
 	context.JSON(200, gin.H{
 		"data": skills})
 }
@@ -30,7 +27,11 @@ func CORSConfig() gin.HandlerFunc {
 }
 
 func main() {
-	database.Migrate()
+	dataMigrateFlag := flag.Bool("datamigrate", false, "")
+	flag.Parse()
+	if *dataMigrateFlag {
+		database.Migrate()
+	}
 	router := gin.Default()
 	router.Use(CORSConfig())
 	router.GET("/languages", LanguagesInfo)

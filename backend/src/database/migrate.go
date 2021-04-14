@@ -1,43 +1,43 @@
 package database
 
 import (
-	"backend/src/database/models"
 	"backend/src/files"
-	"gorm.io/gorm"
+	"fmt"
 	"os"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jmoiron/sqlx"
 )
 
-func fillsLanguageModel(db *gorm.DB) {
+func fillsLanguageModel(db *sqlx.DB) {
 	jsonLanguages := files.OpenJsonLanguages()
+	stmt, _ := db.Prepare("INSERT INTO language(id, name, popularity, learning, created_at) values(?,?,?,?,?)")
 	for _, element := range jsonLanguages {
-		db.Create(&models.Language{
-			Name: element.Name, Popularity: element.Popularity, Learning: element.Learning})
+		stmt.Exec(uuid.NewString(), element.Name, element.Popularity, element.Learning, time.Now())
 	}
 }
 
-func fillsSkillModel(db *gorm.DB) {
+func fillsSkillModel(db *sqlx.DB) {
 	jsonSkills := files.OpenJsonSkills()
+	stmt, _ := db.Prepare("INSERT INTO skill(id, name, type, created_at) values(?,?,?,?)")
 	for _, element := range jsonSkills {
-		db.Create(&models.Skill{
-			Name: element.Name, Type: element.Type})
+		stmt.Exec(uuid.NewString(), element.Name, element.Type, time.Now())
 	}
 }
 
 func DBExists() bool {
-    if _, err := os.Stat("software.db"); err != nil {
-        if os.IsNotExist(err) {
-            return false
-        }
-    }
-    return true
+	if _, err := os.Stat("software.db"); err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+	}
+	return true
 }
 
 func Migrate() {
-	if !DBExists(){
-		db := GetConnection()
-  	db.AutoMigrate(&models.Language{})
-		db.AutoMigrate(&models.Skill{})
-		fillsLanguageModel(db)
-		fillsSkillModel(db)
-	}
+	db := GetConnection()
+	fmt.Print(db)
+	fillsLanguageModel(db)
+	fillsSkillModel(db)
 }
