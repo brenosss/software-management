@@ -20,6 +20,12 @@ func SkillsInfo(context *gin.Context) {
 		"data": skills})
 }
 
+func PersonCreate(context *gin.Context) {
+	person := database.CreatePerson()
+	context.JSON(200, gin.H{
+		"data": person})
+}
+
 func CORSConfig() gin.HandlerFunc {
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:3000/", "*"}
@@ -36,5 +42,6 @@ func main() {
 	router.Use(CORSConfig())
 	router.GET("/languages", LanguagesInfo)
 	router.GET("/skills", SkillsInfo)
+	router.POST("/person", PersonCreate)
 	router.Run()
 }

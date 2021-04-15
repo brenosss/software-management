@@ -12,7 +12,7 @@ import (
 
 func fillsLanguageModel(db *sqlx.DB) {
 	jsonLanguages := files.OpenJsonLanguages()
-	stmt, _ := db.Prepare("INSERT INTO language(id, name, popularity, learning, created_at) values(?,?,?,?,?)")
+	stmt, _ := db.Prepare("INSERT INTO language(language_id, name, popularity, learning, created_at) values(?,?,?,?,?)")
 	for _, element := range jsonLanguages {
 		stmt.Exec(uuid.NewString(), element.Name, element.Popularity, element.Learning, time.Now())
 	}
@@ -20,7 +20,7 @@ func fillsLanguageModel(db *sqlx.DB) {
 
 func fillsSkillModel(db *sqlx.DB) {
 	jsonSkills := files.OpenJsonSkills()
-	stmt, _ := db.Prepare("INSERT INTO skill(id, name, type, created_at) values(?,?,?,?)")
+	stmt, _ := db.Prepare("INSERT INTO skill(skill_id, name, type, created_at) values(?,?,?,?)")
 	for _, element := range jsonSkills {
 		stmt.Exec(uuid.NewString(), element.Name, element.Type, time.Now())
 	}
