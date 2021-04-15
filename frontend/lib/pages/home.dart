@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/components/sideBar.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -7,11 +8,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
       ),
+      drawer: SideBar(),
       body: Center(
         child: ElevatedButton(
           child: Text('Launch screen'),
           onPressed: () {
-            // Navigate to the second screen using a named route.
             Navigator.pushNamed(context, '/library');
           },
         ),

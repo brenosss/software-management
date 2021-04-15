@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/entities/languageInfo.dart';
 import 'package:frontend/services/languageInfo.dart';
 import 'package:frontend/pages/components/languageInfo.dart';
+import 'package:frontend/pages/components/sideBar.dart';
 
 class LibraryScreen extends StatefulWidget {
   LibraryScreen({Key key}) : super(key: key);
@@ -17,6 +18,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       appBar: AppBar(
         title: Text("Library"),
       ),
+      drawer: SideBar(),
       body: Center(
         child: FutureBuilder<List<LanguageInfo>>(
           future: fetchLanguageInfo(),
