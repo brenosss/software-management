@@ -8,13 +8,13 @@ import (
 )
 
 type Person struct {
-	PersonId     string
+	PersonId     string `db:"person_id"`
 	Name         string
 	Email        string
 	Phone        string
 	Description  string
 	Birthday     time.Time
-	PersonSkills []PersonSkill
+	PersonSkills []PersonSkill `db:"person_skill"`
 }
 
 func NewRandonPerson() Person {

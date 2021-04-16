@@ -7,8 +7,8 @@ type PersonSkill struct {
 	PersonId      string `db:"person_id"`
 	SkillId       string `db:"skill_id"`
 	Person        Person
-	Skill         Skill
-	Value         int
-	Progress      int
+	Skill         Skill     `db:"skill"`
+	Value         int       `db:"value"`
+	Progress      int       `db:"progress"`
 	CreatedAt     time.Time `db:"created_at"`
 }
