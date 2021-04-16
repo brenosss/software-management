@@ -30,12 +30,16 @@ class SideBar extends StatelessWidget {
           ListTile(
             title: Text('Person'),
             trailing: Icon(Icons.person),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/person');
+            },
           ),
           ListTile(
             title: Text('Settings'),
             trailing: Icon(Icons.settings),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/');
+            },
           ),
         ],
       ),
