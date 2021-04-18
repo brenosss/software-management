@@ -10,6 +10,20 @@ Future<List<Person>> fetchPersonList() async {
     Iterable list = responseBody['data'];
     return list.map((item) => Person.fromJson(item)).toList();
   } else {
-    throw Exception('Failed to load languages info');
+    throw Exception('Failed to load person list');
+  }
+}
+
+Future<Person> fetchPersonDetail(String personId) async {
+  final response =
+      await http.get(Uri.http("localhost:8080", "/person/$personId"));
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> responseBody = jsonDecode(response.body);
+    Map item = responseBody['data'];
+    return Person.fromJson(item);
+  } else {
+    print(response.body);
+    throw Exception('Failed to load person detail');
   }
 }

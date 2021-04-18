@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/entities/person.dart';
+import 'package:frontend/pages/personDetail.dart';
 
 class PersonTable extends StatelessWidget {
   final List<Person> personList;
@@ -32,7 +33,8 @@ class PersonTable extends StatelessWidget {
       rows: personList
           .map((personItem) => DataRow(
                 onSelectChanged: (newValue) {
-                  print(personItem.personId);
+                  Navigator.pushNamed(context, '/person/detail',
+                      arguments: PersonDetailArguments(personItem.personId));
                 },
                 cells: <DataCell>[
                   DataCell(Text(personItem.name)),
