@@ -40,6 +40,12 @@ func PersonGet(context *gin.Context) {
 		"data": person})
 }
 
+func ProjectCreate(context *gin.Context) {
+	project := queries.CreateProject()
+	context.JSON(200, gin.H{
+		"data": project})
+}
+
 func CORSConfig() gin.HandlerFunc {
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:3000/", "*"}
@@ -62,6 +68,9 @@ func main() {
 	router.POST("/person", PersonCreate)
 	router.GET("/person", PersonList)
 	router.GET("/person/:person_id", PersonGet)
+
+	//Project
+	router.POST("/project", ProjectCreate)
 
 	router.Run()
 }
