@@ -3,7 +3,9 @@ package main
 import (
 	"backend/src/database"
 	"backend/src/database/queries"
+	"backend/src/persons"
 	"flag"
+	"strconv"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -34,8 +36,10 @@ func PersonList(context *gin.Context) {
 }
 
 func PersonGet(context *gin.Context) {
-	personId := context.Param("person_id")
-	person := queries.GetPerson(personId)
+	// TODO handle errors
+	personID, _ := strconv.ParseInt(context.Param("person_id"), 10, 64)
+	db, _ := database.New(database.DatabaseName, "backend/src/database/sql/queries")
+	person := persons.Get(db, personID)
 	context.JSON(200, gin.H{
 		"data": person})
 }
