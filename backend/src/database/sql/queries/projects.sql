@@ -1,4 +1,4 @@
 -- projects.sql
 
 -- name: create-project
-INSERT INTO project name VALUES($1);
+INSERT INTO project (name) VALUES($1);

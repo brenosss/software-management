@@ -33,4 +33,5 @@ func NewRandomPerson(skills []Skill) Person {
 			Progress:      gofakeit.Number(0, 100),
 		})
 	}
+	return p
 }

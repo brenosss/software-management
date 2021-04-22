@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -43,7 +44,7 @@ func New(connStr, queryPath string) (*Database, error) {
 	for tag, q := range queries {
 		stmt, err := db.Preparex(q)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failing while creating '%s' query: %w", tag, err)
 		}
 		preparedQueries[string(tag)] = stmt
 	}
