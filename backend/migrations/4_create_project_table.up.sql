@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS project (
-  project_id VARCHAR(255) NOT NULL PRIMARY KEY,
+  project_id INTEGER PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
 
   created_at DATETIME,
@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS project (
 );
 
 CREATE TABLE IF NOT EXISTS task (
-  task_id VARCHAR(255) NOT NULL PRIMARY KEY,
-  project_id  VARCHAR(255) NOT NULL REFERENCES project(project_id),
-  person_id VARCHAR(255) REFERENCES person(person_id),
+  task_id INTEGER PRIMARY KEY NOT NULL,
+  project_id INTEGER NOT NULL REFERENCES project(project_id),
+  person_id INTEGER REFERENCES person(person_id),
 
   name VARCHAR(255) NOT NULL,
   type VARCHAR(255) NOT NULL,
@@ -23,4 +23,4 @@ CREATE TABLE IF NOT EXISTS task (
   updated_at DATETIME
 );
 
-ALTER TABLE person ADD COLUMN project_id VARCHAR(255) REFERENCES project(project_id);
+ALTER TABLE person ADD COLUMN project_id INTEGER REFERENCES project(project_id);

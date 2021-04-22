@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS person (
-  person_id VARCHAR(255) NOT NULL PRIMARY KEY,
+  person_id INTEGER PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   phone VARCHAR(255) NOT NULL,
@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS person (
 );
 
 CREATE TABLE IF NOT EXISTS person_skill (
-  person_skill_id VARCHAR(255) NOT NULL PRIMARY KEY,
-  person_id  VARCHAR(255) REFERENCES person(person_id),
-  skill_id VARCHAR(255) REFERENCES skill(skill_id),
+  person_skill_id INTEGER PRIMARY KEY NOT NULL,
+  person_id INTEGER REFERENCES person(person_id),
+  skill_id INTEGER REFERENCES skill(skill_id),
 
   value INTEGER,
   progress INTEGER,

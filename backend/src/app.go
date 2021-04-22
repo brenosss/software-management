@@ -1,15 +1,27 @@
 package main
 
 import (
+	"flag"
+	"log"
+	"strconv"
+
 	"backend/src/database"
 	"backend/src/database/queries"
 	"backend/src/persons"
-	"flag"
-	"strconv"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
+
+type Database interface {
+	Query(dest interface{}, query string, args ...interface{}) error
+	Run(query string, args ...interface{}) error
+	Read(dest interface{}, query string, args ...interface{}) error
+}
+
+type Endpoints struct {
+	db Database
+}
 
 func LanguagesInfo(context *gin.Context) {
 	languages := database.GetLanguages()
@@ -35,11 +47,10 @@ func PersonList(context *gin.Context) {
 		"data": people})
 }
 
-func PersonGet(context *gin.Context) {
+func (e *Endpoints) PersonGet(context *gin.Context) {
 	// TODO handle errors
 	personID, _ := strconv.ParseInt(context.Param("person_id"), 10, 64)
-	db, _ := database.New(database.DatabaseName, "backend/src/database/sql/queries")
-	person := persons.Get(db, personID)
+	person := persons.Get(e.db, personID)
 	context.JSON(200, gin.H{
 		"data": person})
 }
@@ -56,13 +67,30 @@ func CORSConfig() gin.HandlerFunc {
 	return cors.New(config)
 }
 
+
 func main() {
-	dataMigrateFlag := flag.Bool("datamigrate", false, "")
+	log.Println("Starting server...")
+	dataMigrateFlag := flag.Bool("populate-database", false, "")
 	flag.Parse()
-	if *dataMigrateFlag {
-		database.Migrate()
-		return
+
+	db, err := database.New(database.DatabaseName, "src/database/sql/queries")
+	if err != nil {
+		log.Panicln("Error while creating the database:", err)
 	}
+	endpoints := Endpoints{db: db}
+
+	if dataMigrateFlag!= nil && *dataMigrateFlag {
+		log.Println("Populating database...")
+		err = db.Run("populate-languages")
+		if err != nil {
+			log.Fatalln("Error while populating languages:", err)
+		}
+		err = db.Run("populate-skills")
+		if err != nil {
+			log.Fatalln("Error while populating skill:", err)
+		}
+	}
+
 	router := gin.Default()
 	router.Use(CORSConfig())
 	router.GET("/languages", LanguagesInfo)
@@ -71,10 +99,14 @@ func main() {
 	//Person
 	router.POST("/person", PersonCreate)
 	router.GET("/person", PersonList)
-	router.GET("/person/:person_id", PersonGet)
+	router.GET("/person/:person_id", endpoints.PersonGet)
 
 	//Project
 	router.POST("/project", ProjectCreate)
 
-	router.Run()
+	log.Println("Server being initiated")
+	err = router.Run()
+	if err != nil {
+		log.Panic(err)
+	}
 }

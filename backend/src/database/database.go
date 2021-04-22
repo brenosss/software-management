@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -55,7 +56,10 @@ func getQueries(paths ...string) (goyesql.Queries, error) {
 	var err error
 	for _, path := range paths {
 		err = filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
-			if info.Name() == filepath.Base(path) {
+			if err != nil {
+				return err
+			}
+			if info.IsDir() {
 				return nil
 			}
 			q, err := goyesql.ParseFile(path)
@@ -67,6 +71,9 @@ func getQueries(paths ...string) (goyesql.Queries, error) {
 			}
 			return nil
 		})
+		if err != nil {
+			return queries, err
+		}
 	}
 	return queries, err
 }
@@ -78,7 +85,10 @@ type Postgres struct {
 }
 
 func (s *Postgres) Query(dest interface{}, query string, args ...interface{}) error {
-	stmt := s.queries[query]
+	stmt, ok := s.queries[query]
+	if !ok {
+		return errors.New("query not found")
+	}
 	if isArrayOrSlice(dest) {
 		return stmt.Select(dest, args...)
 	}
@@ -86,7 +96,10 @@ func (s *Postgres) Query(dest interface{}, query string, args ...interface{}) er
 }
 
 func (s *Postgres) Run(query string, args ...interface{}) error {
-	stmt := s.queries[query]
+	stmt, ok := s.queries[query]
+	if !ok {
+		return errors.New("query not found")
+	}
 	_, err := stmt.Exec(args...)
 	return err
 }
