@@ -30,7 +30,7 @@ import (
 //	Operations
 //}
 
-func New(connStr, queryPath string) (*Postgres, error) {
+func New(connStr, queryPath string) (*Database, error) {
 	queries, err := getQueries(queryPath)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func New(connStr, queryPath string) (*Postgres, error) {
 		}
 		preparedQueries[string(tag)] = stmt
 	}
-	return &Postgres{db: db, queries: preparedQueries}, nil
+	return &Database{db: db, queries: preparedQueries}, nil
 }
 
 // getQueries walks through all the SQL files in all provided paths to get the queries.
@@ -79,12 +79,12 @@ func getQueries(paths ...string) (goyesql.Queries, error) {
 }
 
 
-type Postgres struct {
+type Database struct {
 	db *sqlx.DB
 	queries map[string]*sqlx.Stmt
 }
 
-func (s *Postgres) Query(dest interface{}, query string, args ...interface{}) error {
+func (s *Database) Query(dest interface{}, query string, args ...interface{}) error {
 	stmt, ok := s.queries[query]
 	if !ok {
 		return errors.New("query not found")
@@ -95,7 +95,7 @@ func (s *Postgres) Query(dest interface{}, query string, args ...interface{}) er
 	return stmt.Get(dest, args...)
 }
 
-func (s *Postgres) Run(query string, args ...interface{}) error {
+func (s *Database) Run(query string, args ...interface{}) error {
 	stmt, ok := s.queries[query]
 	if !ok {
 		return errors.New("query not found")
@@ -106,7 +106,7 @@ func (s *Postgres) Run(query string, args ...interface{}) error {
 
 // This will be almost the same as query, but it will run over a read-only connection if it exists.
 // For the meanwhile we will just run Query behind the scenes.
-func (s *Postgres) Read(dest interface{}, query string, args ...interface{}) error {
+func (s *Database) Read(dest interface{}, query string, args ...interface{}) error {
 	return s.Query(dest, query, args...)
 }
 

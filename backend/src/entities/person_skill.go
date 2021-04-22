@@ -3,12 +3,13 @@ package entities
 import "time"
 
 type PersonSkill struct {
-	PersonSkillId string `db:"person_skill_id"`
-	PersonId      string `db:"person_id"`
-	SkillId       string `db:"skill_id"`
-	Person        Person
-	Skill         Skill     `db:"skill"`
-	Value         int       `db:"value"`
-	Progress      int       `db:"progress"`
-	CreatedAt     time.Time `db:"created_at"`
+	ID        string `db:"person_skill_id"`
+	PersonID  string `db:"person_id"`
+	SkillID   string `db:"skill_id"`
+	Value     int       `db:"value"`
+	Progress  int       `db:"progress"`
+	CreatedAt time.Time `db:"created_at"`
+
+	Person    Person
+	Skill     Skill     `db:"skill"`
 }

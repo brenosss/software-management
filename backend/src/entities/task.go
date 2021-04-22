@@ -4,17 +4,12 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
-	"github.com/google/uuid"
 )
 
 type Task struct {
-	TaskId    string `db:"task_id"`
-	ProjectId string `db:"project_id"`
-	PersonId  string `db:"person_id"`
-
-	Person  Person `db:"person"`
-	Project Skill  `db:"project"`
-
+	ID          int64     `db:"task_id"`
+	ProjectID   int64    `db:"project_id"`
+	PersonID    int64    `db:"person_id"`
 	Name        string    `db:"name"`
 	Type        string    `db:"type"`
 	Description string    `db:"description"`
@@ -22,12 +17,15 @@ type Task struct {
 	Duration    int       `db:"duration"`
 	Progress    int       `db:"progress"`
 	CreatedAt   time.Time `db:"created_at"`
+
+	Person  Person `db:"person"`
+	Project Skill  `db:"project"`
 }
 
-func NewRandonTask(projectId string) Task {
+func NewRandomTask(projectID int64) Task {
 	return Task{
-		TaskId:      uuid.NewString(),
-		ProjectId:   projectId,
+		ID:          gofakeit.Int64(),
+		ProjectID:   projectID,
 		Name:        gofakeit.HackerVerb() + " " + gofakeit.HackerNoun(),
 		Type:        gofakeit.RandomString([]string{"BUG", "FEATURE", "REFACTORING"}),
 		Description: gofakeit.HackerPhrase(),

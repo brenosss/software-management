@@ -2,24 +2,23 @@ package entities
 
 import (
 	"github.com/brianvoe/gofakeit/v6"
-	"github.com/google/uuid"
 )
 
 type Project struct {
-	ProjectId string `db:"project_id"`
-	Name      string `db:"name"`
-	Tasks     []Task `db:"task"`
+	ID    int64 `db:"project_id"`
+	Name  string `db:"name"`
+	Tasks []Task `db:"task"`
 }
 
-func NewRandonProject() Project {
-	projectId := uuid.NewString()
-	tasks := []Task{}
+func NewRandomProject() Project {
+	projectID := gofakeit.Int64()
+	var tasks []Task
 	for i := 1; i <= 100; i++ {
-		tasks = append(tasks, NewRandonTask(projectId))
+		tasks = append(tasks, NewRandomTask(projectID))
 	}
 	return Project{
-		ProjectId: projectId,
-		Name:      gofakeit.AppName(),
-		Tasks:     tasks,
+		ID:    projectID,
+		Name:  gofakeit.AppName(),
+		Tasks: tasks,
 	}
 }

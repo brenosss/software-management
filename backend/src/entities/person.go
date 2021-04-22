@@ -4,11 +4,10 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
-	"github.com/google/uuid"
 )
 
 type Person struct {
-	PersonId     string `db:"person_id"`
+	ID           int64 `db:"person_id"`
 	Name         string
 	Email        string
 	Phone        string
@@ -17,9 +16,9 @@ type Person struct {
 	PersonSkills []PersonSkill `db:"person_skill"`
 }
 
-func NewRandonPerson() Person {
+func NewRandomPerson() Person {
 	return Person{
-		PersonId:    uuid.NewString(),
+		ID:          gofakeit.Int64(),
 		Name:        gofakeit.Name(),
 		Email:       gofakeit.Email(),
 		Phone:       gofakeit.Phone(),
