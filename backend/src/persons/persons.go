@@ -36,8 +36,13 @@ func Create(db Writer, person *entities.Person) error {
 	if err != nil {
 		return err
 	}
-	// TODO save skills
-	//for _, s := range person.PersonSkills {
-	//}
+	for _, ps := range person.PersonSkills {
+		AssignSkill(db, &ps)
+	}
 	return nil
+}
+
+func AssignSkill(db Writer, personSkill *entities.PersonSkill) error {
+	return db.Query(&personSkill.ID, "assign-skill",
+		personSkill.PersonID, personSkill.SkillID, personSkill.Value, personSkill.Progress)
 }

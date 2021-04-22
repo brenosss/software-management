@@ -52,10 +52,15 @@ func (e *Endpoints) ListSkills(c *gin.Context) {
 }
 
 func (e *Endpoints) CreateRandomPerson(c *gin.Context) {
-	p := entities.NewRandomPerson()
-	err := persons.Create(e.db, &p)
+	sks, err := skills.List(e.db)
 	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	p := entities.NewRandomPerson(sks)
+	err = persons.Create(e.db, &p)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(200, gin.H{

@@ -16,7 +16,10 @@ type Writer interface {
 func Create(db Writer, project *entities.Project) error {
 	err := db.Query(project.ID, "create-project", project.Name)
 	for _, task := range project.Tasks {
-		tasks.Create(db, &task)
+		err := tasks.Create(db, &task)
+		if err != nil {
+			return err
+		}
 	}
 	return err
 }

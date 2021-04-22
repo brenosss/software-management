@@ -32,3 +32,12 @@ INSERT INTO person (
     birthday,
     created_at
 ) values($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
+
+-- name: assign-skill
+INSERT INTO person_skill (
+    person_id,
+    skill_id,
+    value,
+    progress,
+    created_at
+) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
