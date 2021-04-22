@@ -4,11 +4,10 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
-	"github.com/google/uuid"
 )
 
 type Person struct {
-	PersonId     string `db:"person_id"`
+	ID           int64 `db:"person_id"`
 	Name         string
 	Email        string
 	Phone        string
@@ -17,13 +16,22 @@ type Person struct {
 	PersonSkills []PersonSkill `db:"person_skill"`
 }
 
-func NewRandonPerson() Person {
-	return Person{
-		PersonId:    uuid.NewString(),
+func NewRandomPerson(skills []Skill) Person {
+	p := Person{
+		ID:          gofakeit.Int64(),
 		Name:        gofakeit.Name(),
 		Email:       gofakeit.Email(),
 		Phone:       gofakeit.Phone(),
 		Description: gofakeit.Phrase(),
 		Birthday:    gofakeit.DateRange(time.Now().AddDate(-60, 0, 0), time.Now().AddDate(-18, 0, 0)),
 	}
+	for _, s := range skills {
+		p.PersonSkills = append(p.PersonSkills, PersonSkill{
+			PersonID:      p.ID,
+			SkillID:       s.ID,
+			Value:         gofakeit.Number(0, 100),
+			Progress:      gofakeit.Number(0, 100),
+		})
+	}
+	return p
 }
